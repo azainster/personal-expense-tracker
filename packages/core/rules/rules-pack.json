@@ -1,0 +1,1855 @@
+{
+  "version": "2026.09.30-4",
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-14T00:00:00.000Z",
+  "notes": "Sender fingerprints, per-issuer templates, merchant dictionary and normalization vocab. Shipped as data so a broken bank template is a JSON edit, not a release.",
+  "categories": [
+    {
+      "key": "groceries",
+      "name": "Groceries",
+      "colorHex": "#4C9A6B",
+      "icon": "cart",
+      "sortOrder": 1
+    },
+    {
+      "key": "food_dining",
+      "name": "Food & Dining",
+      "colorHex": "#E0813E",
+      "icon": "fork",
+      "sortOrder": 2
+    },
+    {
+      "key": "chai",
+      "name": "Chai",
+      "colorHex": "#B07A4B",
+      "icon": "cup",
+      "sortOrder": 3
+    },
+    {
+      "key": "transport",
+      "name": "Transport",
+      "colorHex": "#3E7FB0",
+      "icon": "car",
+      "sortOrder": 4
+    },
+    {
+      "key": "travel",
+      "name": "Travel",
+      "colorHex": "#2F8F8F",
+      "icon": "plane",
+      "sortOrder": 5
+    },
+    {
+      "key": "shopping",
+      "name": "Shopping",
+      "colorHex": "#8E6FC4",
+      "icon": "bag",
+      "sortOrder": 6
+    },
+    {
+      "key": "bills",
+      "name": "Bills & Utilities",
+      "colorHex": "#5A6B8C",
+      "icon": "bolt",
+      "sortOrder": 7
+    },
+    {
+      "key": "subscriptions",
+      "name": "Subscriptions",
+      "colorHex": "#6C7BD1",
+      "icon": "repeat",
+      "sortOrder": 8
+    },
+    {
+      "key": "entertainment",
+      "name": "Entertainment",
+      "colorHex": "#C4567F",
+      "icon": "play",
+      "sortOrder": 9
+    },
+    {
+      "key": "health",
+      "name": "Health",
+      "colorHex": "#4FA3A3",
+      "icon": "heart",
+      "sortOrder": 10
+    },
+    {
+      "key": "stuff",
+      "name": "Stuff",
+      "colorHex": "#A8814F",
+      "icon": "cube",
+      "sortOrder": 11
+    },
+    {
+      "key": "transfers",
+      "name": "Transfers",
+      "colorHex": "#8A8A8A",
+      "icon": "arrows",
+      "sortOrder": 12,
+      "excludedFromTotals": true
+    },
+    {
+      "key": "income",
+      "name": "Income",
+      "colorHex": "#3F9E5A",
+      "icon": "arrow-down",
+      "sortOrder": 13,
+      "excludedFromTotals": true
+    },
+    {
+      "key": "other",
+      "name": "Miscellaneous",
+      "colorHex": "#7A7A7A",
+      "icon": "tag",
+      "sortOrder": 14
+    }
+  ],
+  "senders": [
+    {
+      "id": "hdfc-alerts",
+      "issuer": "HDFC Bank",
+      "kind": "bank",
+      "defaultCurrency": "INR",
+      "addresses": [
+        "alerts@hdfcbank.net",
+        "alerts@hdfcbank.com"
+      ],
+      "domains": [
+        "hdfcbank.net",
+        "hdfcbank.com",
+        "hdfcbank.co.in"
+      ],
+      "templates": [
+        {
+          "id": "hdfc-upi-debit",
+          "confidence": 0.97,
+          "isCredit": false,
+          "dateFormat": "DD-MM-YY",
+          "pattern": "Rs\\.?\\s*(?<amount>[\\d,]+(?:\\.\\d{1,2})?)\\s+has been debited from account\\s+\\*{0,2}(?<last4>\\d{4})\\s+to\\s+VPA\\s+(?<merchant>[^\\s]+?)\\s+on\\s+(?<date>\\d{2}-\\d{2}-\\d{2})",
+          "sourceKey": "hdfc_bank",
+          "txnKind": "debit"
+        },
+        {
+          "id": "hdfc-card-spend",
+          "confidence": 0.96,
+          "isCredit": false,
+          "dateFormat": "DD-MM-YYYY",
+          "pattern": "Rs\\.?\\s*(?<amount>[\\d,]+(?:\\.\\d{1,2})?)\\s+(?:has been )?spent on (?:your )?HDFC Bank (?:Credit|Debit) Card (?:ending )?(?:xx|\\*{2})?(?<last4>\\d{4})\\s+at\\s+(?<merchant>.+?)\\s+on\\s+(?<date>\\d{2}-\\d{2}-\\d{4})",
+          "sourceKey": "hdfc_bank",
+          "txnKind": "debit"
+        },
+        {
+          "id": "hdfc-credit",
+          "confidence": 0.95,
+          "isCredit": true,
+          "dateFormat": "DD-MM-YY",
+          "pattern": "Rs\\.?\\s*(?<amount>[\\d,]+(?:\\.\\d{1,2})?)\\s+(?:has been |is )?credited to (?:your )?account\\s+\\*{0,2}(?<last4>\\d{4})\\s+(?:from|by)\\s+(?<merchant>.+?)\\s+on\\s+(?<date>\\d{2}-\\d{2}-\\d{2})",
+          "sourceKey": "hdfc_bank",
+          "txnKind": "credit"
+        },
+        {
+          "id": "hdfc-pixel-spend",
+          "confidence": 0.93,
+          "isCredit": false,
+          "sourceKey": "hdfc_pixel_play",
+          "txnKind": "debit",
+          "dateFormat": "DD-MM-YYYY",
+          "pattern": "Rs\\.?\\s*(?<amount>[\\d,]+(?:\\.\\d{1,2})?)\\s+(?:has been |is )?spent\\s+(?:on|using)\\s+(?:your\\s+)?(?:HDFC\\s+Bank\\s+)?PIXEL(?:\\s+PLAY)?\\s+(?:Credit\\s+)?Card\\s+(?:ending\\s+(?:with\\s+)?|xx|XX|\\*{2,})?(?<last4>\\d{4})\\s+at\\s+(?<merchant>.+?)\\s+on\\s+(?<date>\\d{2}[-/]\\d{2}[-/]\\d{4})(?:\\s+(?:at\\s+)?(?<time>\\d{1,2}:\\d{2}(?::\\d{2})?))?"
+        },
+        {
+          "id": "hdfc-pixel-thankyou",
+          "confidence": 0.93,
+          "isCredit": false,
+          "sourceKey": "hdfc_pixel_play",
+          "txnKind": "debit",
+          "dateFormat": "DD-MM-YYYY",
+          "pattern": "(?:HDFC\\s+Bank\\s+)?PIXEL(?:\\s+PLAY)?\\s+(?:Credit\\s+)?Card\\s+(?:ending\\s+(?:with\\s+)?|xx|XX|\\*{2,})?(?<last4>\\d{4})\\s+for\\s+(?:Rs\\.?|INR)\\s*(?<amount>[\\d,]+(?:\\.\\d{1,2})?)\\s+at\\s+(?<merchant>.+?)\\s+on\\s+(?<date>\\d{2}[-/]\\d{2}[-/]\\d{4})(?:\\s+(?:at\\s+)?(?<time>\\d{1,2}:\\d{2}(?::\\d{2})?))?"
+        },
+        {
+          "id": "hdfc-pixel-refund",
+          "confidence": 0.95,
+          "isCredit": true,
+          "sourceKey": "hdfc_pixel_play",
+          "txnKind": "refund",
+          "dateFormat": "DD-MM-YYYY",
+          "pattern": "(?:Rs\\.?|INR)\\s*(?<amount>[\\d,]+(?:\\.\\d{1,2})?)\\s+(?:has been\\s+)?(?:refunded|credited)\\s+(?:back\\s+)?to\\s+(?:your\\s+)?(?:HDFC\\s+Bank\\s+)?PIXEL(?:\\s+PLAY)?\\s+(?:Credit\\s+)?Card\\s+(?:ending\\s+(?:with\\s+)?|xx|XX|\\*{2,})?(?<last4>\\d{4})(?:[^\\n]{0,80}?(?:from|by)\\s+(?<merchant>[^.;\\n]{2,60}?)\\s+on\\s+(?<date>\\d{1,2}[-/]\\d{1,2}[-/]\\d{2,4}))?"
+        },
+        {
+          "id": "hdfc-pixel-activity",
+          "confidence": 0.98,
+          "isCredit": false,
+          "sourceKey": "hdfc_pixel_play",
+          "txnKind": "purchase",
+          "dateFormat": "DD-MM-YY",
+          "pattern": "Pixel\\s+Play\\s+Credit\\s+Card\\s+ending\\s+(?:with\\s+)?(?<last4>\\d{4})[\\s\\S]{0,200}?transaction\\s+of\\s+(?:Rs\\.?|INR)\\s*(?<amount>[\\d,]+(?:\\.\\d{1,2})?)\\s+at\\s+(?<merchant>.+?)\\s+on\\s+(?<date>\\d{1,2}[-/]\\d{1,2}[-/]\\d{2,4})(?:\\s+at\\s+(?<time>\\d{1,2}:\\d{2}(?::\\d{2})?))?"
+        },
+        {
+          "id": "hdfc-pixel-activity-short",
+          "confidence": 0.94,
+          "isCredit": false,
+          "sourceKey": "hdfc_pixel_play",
+          "txnKind": "purchase",
+          "dateFormat": "DD-MM-YY",
+          "pattern": "transaction\\s+of\\s+(?:Rs\\.?|INR)\\s*(?<amount>[\\d,]+(?:\\.\\d{1,2})?)\\s+at\\s+(?<merchant>.+?)\\s+on\\s+(?<date>\\d{1,2}[-/]\\d{1,2}[-/]\\d{2,4})(?:\\s+at\\s+(?<time>\\d{1,2}:\\d{2}(?::\\d{2})?))?"
+        },
+        {
+          "id": "hdfc-acct-upi-debit",
+          "confidence": 0.98,
+          "isCredit": false,
+          "sourceKey": "hdfc_bank",
+          "txnKind": "debit",
+          "dateFormat": "DD-MM-YY",
+          "pattern": "(?:Rs\\.?|INR)\\s*(?<amount>[\\d,]+(?:\\.\\d{1,2})?)\\s+(?:is|has been|was)\\s+debited\\s+from\\s+your\\s+account\\s+(?:ending|no\\.?|number)?\\s*(?:with\\s+)?(?:XX+|xx+|\\*{2,})?(?<last4>\\d{3,4})(?:\\s+towards\\s+VPA\\s+(?<vpa>[^\\s()]+))?(?:\\s*\\((?<merchant>[^)\\n]{2,60})\\))?(?:\\s+on\\s+(?<date>\\d{1,2}[-/]\\d{1,2}[-/]\\d{2,4}))?"
+        },
+        {
+          "id": "hdfc-acct-credit",
+          "confidence": 0.97,
+          "isCredit": true,
+          "sourceKey": "hdfc_bank",
+          "txnKind": "credit",
+          "dateFormat": "DD-MM-YY",
+          "pattern": "(?:Rs\\.?|INR)\\s*(?<amount>[\\d,]+(?:\\.\\d{1,2})?)\\s+has\\s+been\\s+(?:successfully\\s+)?credited(?:[\\s\\S]{0,120}?account\\s+(?:ending|no\\.?|number)?\\s*(?:XX+|xx+|\\*{2,})?(?<last4>\\d{3,4}))?(?:[\\s\\S]{0,120}?on\\s+(?<date>\\d{1,2}[-/]\\d{1,2}[-/]\\d{2,4}))?"
+        }
+      ],
+      "defaultSourceKey": "hdfc_bank"
+    },
+    {
+      "id": "icici-alerts",
+      "issuer": "ICICI Bank",
+      "kind": "bank",
+      "defaultCurrency": "INR",
+      "addresses": [
+        "credit_cards@icicibank.com",
+        "noreply@icicibank.com",
+        "alerts@icicibank.com"
+      ],
+      "domains": [
+        "icicibank.com"
+      ],
+      "templates": [
+        {
+          "id": "icici-card-txn",
+          "confidence": 0.96,
+          "isCredit": false,
+          "dateFormat": "MMM-DD-YYYY",
+          "pattern": "(?:INR|Rs\\.?)\\s*(?<amount>[\\d,]+(?:\\.\\d{1,2})?)\\s+(?:was |has been )?spent (?:using|on) ICICI Bank Card\\s+(?:XX)?(?<last4>\\d{4})\\s+on\\s+(?<date>\\d{2}-[A-Za-z]{3}-\\d{2,4})\\s+(?:at|on)\\s+(?<merchant>.+?)(?:\\.|,|\\s+Avl)"
+        },
+        {
+          "id": "icici-acct-debit",
+          "confidence": 0.95,
+          "isCredit": false,
+          "dateFormat": "DD-MMM-YY",
+          "pattern": "(?:INR|Rs\\.?)\\s*(?<amount>[\\d,]+(?:\\.\\d{1,2})?)\\s+(?:has been )?debited from (?:your )?(?:A/c|Account)\\s+(?:XX)?(?<last4>\\d{4})\\s+on\\s+(?<date>\\d{2}-[A-Za-z]{3}-\\d{2,4})(?:[^.]*?(?:to|towards)\\s+(?<merchant>[^.;]+))?"
+        }
+      ]
+    },
+    {
+      "id": "sbi-alerts",
+      "issuer": "State Bank of India",
+      "kind": "bank",
+      "defaultCurrency": "INR",
+      "addresses": [
+        "sbicard@sbicard.com",
+        "alerts@sbi.co.in"
+      ],
+      "domains": [
+        "sbicard.com",
+        "sbi.co.in"
+      ],
+      "templates": [
+        {
+          "id": "sbi-card-txn",
+          "confidence": 0.95,
+          "isCredit": false,
+          "dateFormat": "DD-MM-YY",
+          "pattern": "Rs\\.?\\s*(?<amount>[\\d,]+(?:\\.\\d{1,2})?)\\s+spent on your SBI Card\\s+(?:ending\\s+)?(?:XX)?(?<last4>\\d{4})\\s+at\\s+(?<merchant>.+?)\\s+on\\s+(?<date>\\d{2}[-/]\\d{2}[-/]\\d{2,4})"
+        }
+      ]
+    },
+    {
+      "id": "chase-alerts",
+      "issuer": "Chase",
+      "kind": "bank",
+      "defaultCurrency": "USD",
+      "addresses": [
+        "no.reply.alerts@chase.com"
+      ],
+      "domains": [
+        "chase.com"
+      ],
+      "templates": [
+        {
+          "id": "chase-card-txn",
+          "confidence": 0.96,
+          "isCredit": false,
+          "dateFormat": "MMM DD, YYYY",
+          "pattern": "(?:A charge of )?\\$(?<amount>[\\d,]+(?:\\.\\d{2})?)\\s+at\\s+(?<merchant>.+?)\\s+(?:was made|on)\\s+.*?(?<date>[A-Z][a-z]{2}\\s+\\d{1,2},\\s+\\d{4})"
+        }
+      ]
+    },
+    {
+      "id": "amex-alerts",
+      "issuer": "American Express",
+      "kind": "bank",
+      "defaultCurrency": "USD",
+      "addresses": [
+        "americanexpress@welcome.americanexpress.com",
+        "alerts@americanexpress.com"
+      ],
+      "domains": [
+        "americanexpress.com"
+      ],
+      "templates": [
+        {
+          "id": "amex-large-purchase",
+          "confidence": 0.95,
+          "isCredit": false,
+          "dateFormat": "MMM DD, YYYY",
+          "pattern": "\\$(?<amount>[\\d,]+(?:\\.\\d{2})?)\\*?\\s*(?:at|Merchant:)\\s*(?<merchant>.+?)\\s*(?:\\n|\\r|\\|)\\s*(?:Date:)?\\s*(?<date>[A-Z][a-z]{2}\\s+\\d{1,2},\\s+\\d{4})"
+        }
+      ]
+    },
+    {
+      "id": "amazon-in",
+      "issuer": "Amazon",
+      "kind": "merchant",
+      "defaultCurrency": "INR",
+      "merchantName": "Amazon",
+      "addresses": [
+        "auto-confirm@amazon.in",
+        "order-update@amazon.in",
+        "auto-confirm@amazon.com"
+      ],
+      "domains": [
+        "amazon.in",
+        "amazon.com"
+      ],
+      "templates": [
+        {
+          "id": "amazon-order-total",
+          "confidence": 0.94,
+          "isCredit": false,
+          "pattern": "Order Total[\\s:|]*(?:INR|Rs\\.?|₹|\\$)\\s*(?<amount>[\\d,]+(?:\\.\\d{1,2})?)"
+        }
+      ]
+    },
+    {
+      "id": "uber-receipts",
+      "issuer": "Uber",
+      "kind": "merchant",
+      "defaultCurrency": "INR",
+      "merchantName": "Uber",
+      "addresses": [
+        "receipts@uber.com",
+        "noreply@uber.com"
+      ],
+      "domains": [
+        "uber.com"
+      ],
+      "templates": [
+        {
+          "id": "uber-total",
+          "confidence": 0.94,
+          "isCredit": false,
+          "pattern": "(?<![A-Za-z])Total[\\s:|]*(?:₹|Rs\\.?|INR|\\$)\\s*(?<amount>[\\d,]+(?:\\.\\d{1,2})?)"
+        }
+      ]
+    },
+    {
+      "id": "swiggy",
+      "issuer": "Swiggy",
+      "kind": "merchant",
+      "defaultCurrency": "INR",
+      "merchantName": "Swiggy",
+      "addresses": [
+        "noreply@swiggy.in",
+        "no-reply@swiggy.in"
+      ],
+      "domains": [
+        "swiggy.in",
+        "swiggy.com"
+      ],
+      "templates": [
+        {
+          "id": "swiggy-paid",
+          "confidence": 0.93,
+          "isCredit": false,
+          "pattern": "(?:Grand Total|Total Paid|Bill Total|Amount Paid)[\\s:|]*(?:₹|Rs\\.?|INR)\\s*(?<amount>[\\d,]+(?:\\.\\d{1,2})?)"
+        }
+      ]
+    },
+    {
+      "id": "zomato",
+      "issuer": "Zomato",
+      "kind": "merchant",
+      "defaultCurrency": "INR",
+      "merchantName": "Zomato",
+      "addresses": [
+        "noreply@zomato.com",
+        "order@zomato.com"
+      ],
+      "domains": [
+        "zomato.com"
+      ],
+      "templates": [
+        {
+          "id": "zomato-total",
+          "confidence": 0.93,
+          "isCredit": false,
+          "pattern": "(?:Grand Total|\\bTotal)[\\s:|]*(?:₹|Rs\\.?|INR)\\s*(?<amount>[\\d,]+(?:\\.\\d{1,2})?)"
+        }
+      ]
+    },
+    {
+      "id": "apple-receipts",
+      "issuer": "Apple",
+      "kind": "merchant",
+      "defaultCurrency": "USD",
+      "merchantName": "Apple",
+      "addresses": [
+        "no_reply@email.apple.com"
+      ],
+      "domains": [
+        "email.apple.com",
+        "apple.com"
+      ],
+      "templates": [
+        {
+          "id": "apple-total",
+          "confidence": 0.93,
+          "isCredit": false,
+          "pattern": "(?<![A-Za-z])TOTAL[\\s:|]*(?:₹|Rs\\.?|INR|\\$)\\s*(?<amount>[\\d,]+(?:\\.\\d{1,2})?)"
+        }
+      ]
+    },
+    {
+      "id": "stripe-receipts",
+      "issuer": "Stripe",
+      "kind": "processor",
+      "defaultCurrency": "USD",
+      "addresses": [
+        "receipts@stripe.com"
+      ],
+      "domains": [
+        "stripe.com"
+      ],
+      "templates": [
+        {
+          "id": "stripe-amount-paid",
+          "confidence": 0.92,
+          "isCredit": false,
+          "pattern": "Amount paid[\\s:|]*(?:₹|Rs\\.?|INR|\\$|US\\$)\\s*(?<amount>[\\d,]+(?:\\.\\d{1,2})?)"
+        }
+      ]
+    },
+    {
+      "id": "union-bank-alerts",
+      "issuer": "Union Bank of India",
+      "kind": "bank",
+      "defaultCurrency": "INR",
+      "defaultSourceKey": "union_bank",
+      "addresses": [
+        "noreplyubi-txn@ubi.bank.in",
+        "alerts@unionbankofindia.com",
+        "noreply@unionbankofindia.com",
+        "ubi@unionbankofindia.com",
+        "alerts@unionbankofindia.bank",
+        "transactionalert@unionbankofindia.com"
+      ],
+      "domains": [
+        "ubi.bank.in",
+        "ubibank.in",
+        "unionbankofindia.com",
+        "unionbankofindia.bank",
+        "unionbankofindia.co.in",
+        "unionbank.co.in",
+        "unionbankonline.co.in"
+      ],
+      "templates": [
+        {
+          "id": "union-acct-debit",
+          "confidence": 0.96,
+          "isCredit": false,
+          "sourceKey": "union_bank",
+          "txnKind": "debit",
+          "pattern": "A/?[cC]\\.?\\s*(?:no\\.?\\s*)?(?:XX+|xx+|\\*{2,})?(?<last4>\\d{3,4})\\s+(?:is|has been|was)\\s+debited\\s+(?:for|by|with)\\s+(?:Rs\\.?|INR)\\s*(?<amount>[\\d,]+(?:\\.\\d{1,2})?)(?:\\s+on\\s+(?<date>\\d{1,2}[-/]\\d{1,2}[-/]\\d{2,4}))?(?:\\s+(?:by\\s+)?(?:transfer\\s+to|to|towards|at)\\s+(?:VPA\\s+)?(?<merchant>[^.;\\n(]{2,60}?)\\s*(?=[.;\\n(]|$))?(?:[^\\n]{0,80}?(?:UPI\\s*Ref(?:erence)?\\s*(?:no\\.?|number)?|UTR|RRN|Ref(?:erence)?\\s*(?:no\\.?|number))\\s*:?\\s*(?<ref>[A-Za-z0-9]{6,25}))?",
+          "dateFormat": "DD-MM-YYYY"
+        },
+        {
+          "id": "union-amount-first-debit",
+          "confidence": 0.95,
+          "isCredit": false,
+          "sourceKey": "union_bank",
+          "txnKind": "debit",
+          "pattern": "(?:Rs\\.?|INR)\\s*(?<amount>[\\d,]+(?:\\.\\d{1,2})?)\\s+(?:has been\\s+|is\\s+)?debited\\s+from\\s+(?:your\\s+)?A/?[cC]\\.?\\s*(?:no\\.?\\s*)?(?:XX+|xx+|\\*{2,})?(?<last4>\\d{3,4})(?:\\s+on\\s+(?<date>\\d{1,2}[-/]\\d{1,2}[-/]\\d{2,4}))?(?:\\s+(?:by\\s+)?(?:transfer\\s+to|to|towards|at)\\s+(?:VPA\\s+)?(?<merchant>[^.;\\n(]{2,60}?)\\s*(?=[.;\\n(]|$))?(?:[^\\n]{0,80}?(?:UPI\\s*Ref(?:erence)?\\s*(?:no\\.?|number)?|UTR|RRN|Ref(?:erence)?\\s*(?:no\\.?|number))\\s*:?\\s*(?<ref>[A-Za-z0-9]{6,25}))?",
+          "dateFormat": "DD-MM-YYYY"
+        },
+        {
+          "id": "union-acct-credit",
+          "confidence": 0.94,
+          "isCredit": true,
+          "sourceKey": "union_bank",
+          "txnKind": "credit",
+          "pattern": "A/?[cC]\\.?\\s*(?:no\\.?\\s*)?(?:XX+|xx+|\\*{2,})?(?<last4>\\d{3,4})\\s+(?:is|has been|was)\\s+credited\\s+(?:for|by|with)\\s+(?:Rs\\.?|INR)\\s*(?<amount>[\\d,]+(?:\\.\\d{1,2})?)(?:\\s+on\\s+(?<date>\\d{1,2}[-/]\\d{1,2}[-/]\\d{2,4}))?(?:\\s+(?:by\\s+)?(?:transfer\\s+from|from|by)\\s+(?<merchant>[^.;\\n(]{2,60}?)\\s*(?=[.;\\n(]|$))?(?:[^\\n]{0,80}?(?:UPI\\s*Ref(?:erence)?\\s*(?:no\\.?|number)?|UTR|RRN|Ref(?:erence)?\\s*(?:no\\.?|number))\\s*:?\\s*(?<ref>[A-Za-z0-9]{6,25}))?",
+          "dateFormat": "DD-MM-YYYY"
+        }
+      ]
+    }
+  ],
+  "discoveryHints": {
+    "subjectTerms": [
+      "receipt",
+      "invoice",
+      "transaction alert",
+      "debited",
+      "order confirmation",
+      "payment received",
+      "you paid",
+      "payment successful",
+      "your order",
+      "purchase"
+    ],
+    "bodyPhrases": [
+      "has been debited",
+      "transaction of",
+      "amount of",
+      "was charged",
+      "order total",
+      "is debited",
+      "debited for",
+      "is credited"
+    ]
+  },
+  "normalization": {
+    "railPrefixes": [
+      "POS",
+      "UPI",
+      "NEFT",
+      "IMPS",
+      "RTGS",
+      "ACH",
+      "ATM",
+      "ECS",
+      "NACH",
+      "MMT",
+      "VPS",
+      "PUR",
+      "SQ",
+      "TST",
+      "PAYPAL",
+      "PY",
+      "SP",
+      "IN",
+      "WWW",
+      "APLPAY",
+      "GPAY",
+      "PHONEPE",
+      "BHIM",
+      "PAYTM",
+      "CARD",
+      "DEBIT",
+      "CREDIT",
+      "TXN",
+      "REF",
+      "PMT"
+    ],
+    "cityTokens": [
+      "BANGALORE",
+      "BENGALURU",
+      "MUMBAI",
+      "DELHI",
+      "NEW DELHI",
+      "NOIDA",
+      "GURGAON",
+      "GURUGRAM",
+      "HYDERABAD",
+      "CHENNAI",
+      "PUNE",
+      "KOLKATA",
+      "AHMEDABAD",
+      "JAIPUR",
+      "KOCHI",
+      "INDORE",
+      "CHANDIGARH",
+      "LUCKNOW",
+      "NAGPUR",
+      "SURAT",
+      "BHOPAL",
+      "COIMBATORE",
+      "VISAKHAPATNAM",
+      "SAN FRANCISCO",
+      "NEW YORK",
+      "SEATTLE",
+      "LONDON",
+      "SINGAPORE",
+      "DUBAI",
+      "AUSTIN",
+      "CHICAGO"
+    ],
+    "countryTokens": [
+      "IN",
+      "IND",
+      "INDIA",
+      "US",
+      "USA",
+      "UK",
+      "GB",
+      "SG",
+      "AE",
+      "CA",
+      "AU"
+    ],
+    "stopSuffixes": [
+      "PVT LTD",
+      "PRIVATE LIMITED",
+      "PVT",
+      "LTD",
+      "LIMITED",
+      "LLP",
+      "INC",
+      "LLC",
+      "CORP",
+      "COM",
+      "CO",
+      "TECHNOLOGIES",
+      "TECHNOLOGY",
+      "SERVICES",
+      "SOLUTIONS",
+      "ENTERPRISES",
+      "RETAIL",
+      "STORES",
+      "STORE",
+      "ONLINE",
+      "PAYMENTS",
+      "PAYMENT",
+      "INDIA",
+      "SALARY",
+      "PAYROLL",
+      "WAGES",
+      "POS",
+      "PURCHASE"
+    ]
+  },
+  "keywordRules": [
+    {
+      "tokens": [
+        "cafe",
+        "coffee",
+        "roasters",
+        "espresso",
+        "chai",
+        "tea house",
+        "brew",
+        "tapri",
+        "chai wala",
+        "chaiwala",
+        "tea stall",
+        "chai point",
+        "chaayos",
+        "kadak"
+      ],
+      "category": "chai"
+    },
+    {
+      "tokens": [
+        "restaurant",
+        "kitchen",
+        "diner",
+        "pizzeria",
+        "biryani",
+        "dhaba",
+        "grill",
+        "eatery",
+        "bakery",
+        "bar and",
+        "foods"
+      ],
+      "category": "food_dining"
+    },
+    {
+      "tokens": [
+        "mart",
+        "supermarket",
+        "grocer",
+        "bazaar",
+        "provision",
+        "kirana",
+        "farms",
+        "fresh"
+      ],
+      "category": "groceries"
+    },
+    {
+      "tokens": [
+        "fuel",
+        "petrol",
+        "petroleum",
+        "gas station",
+        "metro",
+        "railway",
+        "taxi",
+        "cab",
+        "parking",
+        "toll",
+        "transit"
+      ],
+      "category": "transport"
+    },
+    {
+      "tokens": [
+        "pharma",
+        "pharmacy",
+        "hospital",
+        "clinic",
+        "diagnostic",
+        "medical",
+        "dental",
+        "labs"
+      ],
+      "category": "health"
+    },
+    {
+      "tokens": [
+        "airlines",
+        "airways",
+        "hotel",
+        "resort",
+        "travels",
+        "tours",
+        "hostel",
+        "lodge"
+      ],
+      "category": "travel"
+    },
+    {
+      "tokens": [
+        "electric",
+        "power",
+        "broadband",
+        "telecom",
+        "mobile",
+        "gas bill",
+        "water",
+        "insurance",
+        "recharge"
+      ],
+      "category": "bills"
+    },
+    {
+      "tokens": [
+        "cinema",
+        "cinemas",
+        "theatre",
+        "multiplex",
+        "games",
+        "gaming",
+        "music",
+        "studios"
+      ],
+      "category": "entertainment"
+    },
+    {
+      "tokens": [
+        "salary",
+        "payroll",
+        "interest credited",
+        "dividend",
+        "refund"
+      ],
+      "category": "income"
+    },
+    {
+      "tokens": [
+        "transfer",
+        "self",
+        "own account",
+        "wallet load",
+        "add money"
+      ],
+      "category": "transfers"
+    },
+    {
+      "tokens": [
+        "subscription",
+        "membership",
+        "premium plan",
+        "recurring payment",
+        "auto-renew",
+        "autorenewal"
+      ],
+      "category": "subscriptions"
+    }
+  ],
+  "transferSignals": [
+    "transfer to your own account",
+    "transferred to your own",
+    "self transfer",
+    "own account",
+    "added to your wallet",
+    "wallet top-up",
+    "wallet topup",
+    "load money",
+    "added money",
+    "moved to savings",
+    "internal transfer",
+    "between your accounts"
+  ],
+  "merchants": {
+    "amazon": [
+      "Amazon",
+      "shopping"
+    ],
+    "flipkart": [
+      "Flipkart",
+      "shopping"
+    ],
+    "myntra": [
+      "Myntra",
+      "shopping"
+    ],
+    "ajio": [
+      "Ajio",
+      "shopping"
+    ],
+    "nykaa": [
+      "Nykaa",
+      "shopping"
+    ],
+    "meesho": [
+      "Meesho",
+      "shopping"
+    ],
+    "snapdeal": [
+      "Snapdeal",
+      "shopping"
+    ],
+    "tatacliq": [
+      "Tata CLiQ",
+      "shopping"
+    ],
+    "decathlon": [
+      "Decathlon",
+      "shopping"
+    ],
+    "ikea": [
+      "IKEA",
+      "shopping"
+    ],
+    "pepperfry": [
+      "Pepperfry",
+      "shopping"
+    ],
+    "urban ladder": [
+      "Urban Ladder",
+      "shopping"
+    ],
+    "lenskart": [
+      "Lenskart",
+      "shopping"
+    ],
+    "croma": [
+      "Croma",
+      "shopping"
+    ],
+    "reliance digital": [
+      "Reliance Digital",
+      "shopping"
+    ],
+    "vijay sales": [
+      "Vijay Sales",
+      "shopping"
+    ],
+    "shoppers stop": [
+      "Shoppers Stop",
+      "shopping"
+    ],
+    "lifestyle": [
+      "Lifestyle",
+      "shopping"
+    ],
+    "westside": [
+      "Westside",
+      "shopping"
+    ],
+    "zara": [
+      "Zara",
+      "shopping"
+    ],
+    "hm": [
+      "H&M",
+      "shopping"
+    ],
+    "uniqlo": [
+      "Uniqlo",
+      "shopping"
+    ],
+    "nike": [
+      "Nike",
+      "shopping"
+    ],
+    "adidas": [
+      "Adidas",
+      "shopping"
+    ],
+    "puma": [
+      "Puma",
+      "shopping"
+    ],
+    "target": [
+      "Target",
+      "shopping"
+    ],
+    "walmart": [
+      "Walmart",
+      "groceries"
+    ],
+    "costco": [
+      "Costco",
+      "groceries"
+    ],
+    "best buy": [
+      "Best Buy",
+      "shopping"
+    ],
+    "etsy": [
+      "Etsy",
+      "shopping"
+    ],
+    "ebay": [
+      "eBay",
+      "shopping"
+    ],
+    "shein": [
+      "Shein",
+      "shopping"
+    ],
+    "bigbasket": [
+      "BigBasket",
+      "groceries"
+    ],
+    "blinkit": [
+      "Blinkit",
+      "groceries"
+    ],
+    "zepto": [
+      "Zepto",
+      "groceries"
+    ],
+    "dmart": [
+      "DMart",
+      "groceries"
+    ],
+    "instamart": [
+      "Swiggy Instamart",
+      "groceries"
+    ],
+    "jiomart": [
+      "JioMart",
+      "groceries"
+    ],
+    "more supermarket": [
+      "More",
+      "groceries"
+    ],
+    "spencers": [
+      "Spencer's",
+      "groceries"
+    ],
+    "natures basket": [
+      "Nature's Basket",
+      "groceries"
+    ],
+    "licious": [
+      "Licious",
+      "groceries"
+    ],
+    "country delight": [
+      "Country Delight",
+      "groceries"
+    ],
+    "milkbasket": [
+      "Milkbasket",
+      "groceries"
+    ],
+    "whole foods": [
+      "Whole Foods",
+      "groceries"
+    ],
+    "trader joes": [
+      "Trader Joe's",
+      "groceries"
+    ],
+    "safeway": [
+      "Safeway",
+      "groceries"
+    ],
+    "kroger": [
+      "Kroger",
+      "groceries"
+    ],
+    "tesco": [
+      "Tesco",
+      "groceries"
+    ],
+    "aldi": [
+      "Aldi",
+      "groceries"
+    ],
+    "swiggy": [
+      "Swiggy",
+      "food_dining"
+    ],
+    "zomato": [
+      "Zomato",
+      "food_dining"
+    ],
+    "dominos": [
+      "Domino's Pizza",
+      "food_dining"
+    ],
+    "pizza hut": [
+      "Pizza Hut",
+      "food_dining"
+    ],
+    "mcdonalds": [
+      "McDonald's",
+      "food_dining"
+    ],
+    "kfc": [
+      "KFC",
+      "food_dining"
+    ],
+    "burger king": [
+      "Burger King",
+      "food_dining"
+    ],
+    "subway": [
+      "Subway",
+      "food_dining"
+    ],
+    "faasos": [
+      "Faasos",
+      "food_dining"
+    ],
+    "behrouz": [
+      "Behrouz Biryani",
+      "food_dining"
+    ],
+    "eatfit": [
+      "EatFit",
+      "food_dining"
+    ],
+    "freshmenu": [
+      "FreshMenu",
+      "food_dining"
+    ],
+    "doordash": [
+      "DoorDash",
+      "food_dining"
+    ],
+    "ubereats": [
+      "Uber Eats",
+      "food_dining"
+    ],
+    "uber eats": [
+      "Uber Eats",
+      "food_dining"
+    ],
+    "grubhub": [
+      "Grubhub",
+      "food_dining"
+    ],
+    "deliveroo": [
+      "Deliveroo",
+      "food_dining"
+    ],
+    "chipotle": [
+      "Chipotle",
+      "food_dining"
+    ],
+    "wendys": [
+      "Wendy's",
+      "food_dining"
+    ],
+    "taco bell": [
+      "Taco Bell",
+      "food_dining"
+    ],
+    "barbeque nation": [
+      "Barbeque Nation",
+      "food_dining"
+    ],
+    "social": [
+      "Social",
+      "food_dining"
+    ],
+    "toit": [
+      "Toit",
+      "food_dining"
+    ],
+    "starbucks": [
+      "Starbucks",
+      "chai"
+    ],
+    "third wave coffee": [
+      "Third Wave Coffee",
+      "chai"
+    ],
+    "blue tokai": [
+      "Blue Tokai",
+      "chai"
+    ],
+    "cafe coffee day": [
+      "Cafe Coffee Day",
+      "chai"
+    ],
+    "ccd": [
+      "Cafe Coffee Day",
+      "chai"
+    ],
+    "chaayos": [
+      "Chaayos",
+      "chai"
+    ],
+    "chai point": [
+      "Chai Point",
+      "chai"
+    ],
+    "costa coffee": [
+      "Costa Coffee",
+      "chai"
+    ],
+    "dunkin": [
+      "Dunkin'",
+      "chai"
+    ],
+    "peets coffee": [
+      "Peet's Coffee",
+      "chai"
+    ],
+    "tim hortons": [
+      "Tim Hortons",
+      "chai"
+    ],
+    "araku coffee": [
+      "Araku Coffee",
+      "chai"
+    ],
+    "subko": [
+      "Subko",
+      "chai"
+    ],
+    "uber": [
+      "Uber",
+      "transport"
+    ],
+    "ola": [
+      "Ola",
+      "transport"
+    ],
+    "rapido": [
+      "Rapido",
+      "transport"
+    ],
+    "lyft": [
+      "Lyft",
+      "transport"
+    ],
+    "bmtc": [
+      "BMTC",
+      "transport"
+    ],
+    "namma metro": [
+      "Namma Metro",
+      "transport"
+    ],
+    "delhi metro": [
+      "Delhi Metro",
+      "transport"
+    ],
+    "dmrc": [
+      "Delhi Metro",
+      "transport"
+    ],
+    "irctc": [
+      "IRCTC",
+      "transport"
+    ],
+    "indian railways": [
+      "Indian Railways",
+      "transport"
+    ],
+    "fastag": [
+      "FASTag",
+      "transport"
+    ],
+    "paytm fastag": [
+      "FASTag",
+      "transport"
+    ],
+    "indian oil": [
+      "Indian Oil",
+      "transport"
+    ],
+    "hp petrol": [
+      "HP Petrol",
+      "transport"
+    ],
+    "bharat petroleum": [
+      "Bharat Petroleum",
+      "transport"
+    ],
+    "shell": [
+      "Shell",
+      "transport"
+    ],
+    "bounce": [
+      "Bounce",
+      "transport"
+    ],
+    "yulu": [
+      "Yulu",
+      "transport"
+    ],
+    "blusmart": [
+      "BluSmart",
+      "transport"
+    ],
+    "quick ride": [
+      "Quick Ride",
+      "transport"
+    ],
+    "netflix": [
+      "Netflix",
+      "subscriptions"
+    ],
+    "spotify": [
+      "Spotify",
+      "subscriptions"
+    ],
+    "youtube premium": [
+      "YouTube Premium",
+      "subscriptions"
+    ],
+    "google youtube": [
+      "YouTube Premium",
+      "subscriptions"
+    ],
+    "hotstar": [
+      "Disney+ Hotstar",
+      "subscriptions"
+    ],
+    "disney plus": [
+      "Disney+",
+      "subscriptions"
+    ],
+    "prime video": [
+      "Prime Video",
+      "subscriptions"
+    ],
+    "sonyliv": [
+      "SonyLIV",
+      "subscriptions"
+    ],
+    "zee5": [
+      "ZEE5",
+      "subscriptions"
+    ],
+    "jiocinema": [
+      "JioCinema",
+      "subscriptions"
+    ],
+    "bookmyshow": [
+      "BookMyShow",
+      "entertainment"
+    ],
+    "pvr": [
+      "PVR Cinemas",
+      "entertainment"
+    ],
+    "inox": [
+      "INOX",
+      "entertainment"
+    ],
+    "cinepolis": [
+      "Cinepolis",
+      "entertainment"
+    ],
+    "steam": [
+      "Steam",
+      "entertainment"
+    ],
+    "playstation": [
+      "PlayStation",
+      "entertainment"
+    ],
+    "xbox": [
+      "Xbox",
+      "entertainment"
+    ],
+    "nintendo": [
+      "Nintendo",
+      "entertainment"
+    ],
+    "audible": [
+      "Audible",
+      "subscriptions"
+    ],
+    "kindle": [
+      "Kindle",
+      "entertainment"
+    ],
+    "hulu": [
+      "Hulu",
+      "subscriptions"
+    ],
+    "max": [
+      "Max",
+      "subscriptions"
+    ],
+    "airtel": [
+      "Airtel",
+      "bills"
+    ],
+    "jio": [
+      "Jio",
+      "bills"
+    ],
+    "vodafone idea": [
+      "Vi",
+      "bills"
+    ],
+    "vi": [
+      "Vi",
+      "bills"
+    ],
+    "bsnl": [
+      "BSNL",
+      "bills"
+    ],
+    "act fibernet": [
+      "ACT Fibernet",
+      "bills"
+    ],
+    "hathway": [
+      "Hathway",
+      "bills"
+    ],
+    "bescom": [
+      "BESCOM",
+      "bills"
+    ],
+    "tata power": [
+      "Tata Power",
+      "bills"
+    ],
+    "adani electricity": [
+      "Adani Electricity",
+      "bills"
+    ],
+    "mseb": [
+      "MSEB",
+      "bills"
+    ],
+    "bwssb": [
+      "BWSSB",
+      "bills"
+    ],
+    "indane gas": [
+      "Indane Gas",
+      "bills"
+    ],
+    "lic": [
+      "LIC",
+      "bills"
+    ],
+    "hdfc life": [
+      "HDFC Life",
+      "bills"
+    ],
+    "icici lombard": [
+      "ICICI Lombard",
+      "bills"
+    ],
+    "star health": [
+      "Star Health",
+      "bills"
+    ],
+    "comcast": [
+      "Comcast",
+      "bills"
+    ],
+    "verizon": [
+      "Verizon",
+      "bills"
+    ],
+    "att": [
+      "AT&T",
+      "bills"
+    ],
+    "t mobile": [
+      "T-Mobile",
+      "bills"
+    ],
+    "google one": [
+      "Google One",
+      "subscriptions"
+    ],
+    "icloud": [
+      "iCloud",
+      "subscriptions"
+    ],
+    "dropbox": [
+      "Dropbox",
+      "subscriptions"
+    ],
+    "adobe": [
+      "Adobe",
+      "subscriptions"
+    ],
+    "microsoft": [
+      "Microsoft",
+      "bills"
+    ],
+    "openai": [
+      "OpenAI",
+      "subscriptions"
+    ],
+    "anthropic": [
+      "Anthropic",
+      "subscriptions"
+    ],
+    "github": [
+      "GitHub",
+      "subscriptions"
+    ],
+    "notion": [
+      "Notion",
+      "subscriptions"
+    ],
+    "figma": [
+      "Figma",
+      "bills"
+    ],
+    "slack": [
+      "Slack",
+      "bills"
+    ],
+    "zoom": [
+      "Zoom",
+      "bills"
+    ],
+    "aws": [
+      "Amazon Web Services",
+      "bills"
+    ],
+    "amazon web services": [
+      "Amazon Web Services",
+      "bills"
+    ],
+    "digitalocean": [
+      "DigitalOcean",
+      "bills"
+    ],
+    "vercel": [
+      "Vercel",
+      "bills"
+    ],
+    "cloudflare": [
+      "Cloudflare",
+      "bills"
+    ],
+    "apollo pharmacy": [
+      "Apollo Pharmacy",
+      "health"
+    ],
+    "pharmeasy": [
+      "PharmEasy",
+      "health"
+    ],
+    "netmeds": [
+      "Netmeds",
+      "health"
+    ],
+    "1mg": [
+      "Tata 1mg",
+      "health"
+    ],
+    "practo": [
+      "Practo",
+      "health"
+    ],
+    "cult fit": [
+      "Cult.fit",
+      "health"
+    ],
+    "healthifyme": [
+      "HealthifyMe",
+      "health"
+    ],
+    "manipal hospitals": [
+      "Manipal Hospitals",
+      "health"
+    ],
+    "fortis": [
+      "Fortis Healthcare",
+      "health"
+    ],
+    "thyrocare": [
+      "Thyrocare",
+      "health"
+    ],
+    "dr lal pathlabs": [
+      "Dr Lal PathLabs",
+      "health"
+    ],
+    "cvs": [
+      "CVS Pharmacy",
+      "health"
+    ],
+    "walgreens": [
+      "Walgreens",
+      "health"
+    ],
+    "makemytrip": [
+      "MakeMyTrip",
+      "travel"
+    ],
+    "goibibo": [
+      "Goibibo",
+      "travel"
+    ],
+    "cleartrip": [
+      "Cleartrip",
+      "travel"
+    ],
+    "yatra": [
+      "Yatra",
+      "travel"
+    ],
+    "ixigo": [
+      "ixigo",
+      "travel"
+    ],
+    "indigo": [
+      "IndiGo",
+      "travel"
+    ],
+    "air india": [
+      "Air India",
+      "travel"
+    ],
+    "vistara": [
+      "Vistara",
+      "travel"
+    ],
+    "spicejet": [
+      "SpiceJet",
+      "travel"
+    ],
+    "emirates": [
+      "Emirates",
+      "travel"
+    ],
+    "airbnb": [
+      "Airbnb",
+      "travel"
+    ],
+    "booking com": [
+      "Booking.com",
+      "travel"
+    ],
+    "oyo": [
+      "OYO",
+      "travel"
+    ],
+    "taj hotels": [
+      "Taj Hotels",
+      "travel"
+    ],
+    "marriott": [
+      "Marriott",
+      "travel"
+    ],
+    "expedia": [
+      "Expedia",
+      "travel"
+    ],
+    "redbus": [
+      "redBus",
+      "travel"
+    ],
+    "paytm": [
+      "Paytm",
+      "transfers"
+    ],
+    "phonepe": [
+      "PhonePe",
+      "transfers"
+    ],
+    "google pay": [
+      "Google Pay",
+      "transfers"
+    ],
+    "gpay": [
+      "Google Pay",
+      "transfers"
+    ],
+    "bhim": [
+      "BHIM UPI",
+      "transfers"
+    ],
+    "cred": [
+      "CRED",
+      "transfers"
+    ],
+    "razorpay": [
+      "Razorpay",
+      "transfers"
+    ],
+    "venmo": [
+      "Venmo",
+      "transfers"
+    ],
+    "zelle": [
+      "Zelle",
+      "transfers"
+    ],
+    "wise": [
+      "Wise",
+      "transfers"
+    ],
+    "revolut": [
+      "Revolut",
+      "transfers"
+    ],
+    "zerodha": [
+      "Zerodha",
+      "transfers"
+    ],
+    "groww": [
+      "Groww",
+      "transfers"
+    ],
+    "upstox": [
+      "Upstox",
+      "transfers"
+    ],
+    "coinbase": [
+      "Coinbase",
+      "transfers"
+    ],
+    "apple": [
+      "Apple",
+      "subscriptions"
+    ],
+    "google": [
+      "Google",
+      "bills"
+    ],
+    "stripe": [
+      "Stripe",
+      "bills"
+    ],
+    "tapri": [
+      "Tapri",
+      "chai"
+    ],
+    "chai sutta bar": [
+      "Chai Sutta Bar",
+      "chai"
+    ],
+    "tea villa cafe": [
+      "Tea Villa Cafe",
+      "chai"
+    ],
+    "wagh bakri": [
+      "Wagh Bakri Tea Lounge",
+      "chai"
+    ],
+    "mba chai wala": [
+      "MBA Chai Wala",
+      "chai"
+    ],
+    "chai thela": [
+      "Chai Thela",
+      "chai"
+    ],
+    "chatgpt": [
+      "ChatGPT",
+      "subscriptions"
+    ],
+    "microsoft 365": [
+      "Microsoft 365",
+      "subscriptions"
+    ],
+    "canva": [
+      "Canva",
+      "subscriptions"
+    ],
+    "apple music": [
+      "Apple Music",
+      "subscriptions"
+    ],
+    "linkedin premium": [
+      "LinkedIn Premium",
+      "subscriptions"
+    ]
+  },
+  "merchantAliases": {
+    "amzn mktp": "amazon",
+    "amzn": "amazon",
+    "amazon retail": "amazon",
+    "amazon seller": "amazon",
+    "amazonin": "amazon",
+    "amazon pay": "amazon",
+    "flipkart internet": "flipkart",
+    "swiggy instamart": "instamart",
+    "bundl technologies": "swiggy",
+    "swiggyin": "swiggy",
+    "zomato media": "zomato",
+    "uber india systems": "uber",
+    "uberrides": "uber",
+    "uber trip": "uber",
+    "uber bv": "uber",
+    "ubereats": "uber eats",
+    "ani technologies": "ola",
+    "olacabs": "ola",
+    "netflix entertainment": "netflix",
+    "spotify india": "spotify",
+    "google play": "google",
+    "google india": "google",
+    "apple services": "apple",
+    "apple com bill": "apple",
+    "itunes": "apple",
+    "one97 communications": "paytm",
+    "paytm wallet": "paytm",
+    "phonepe private": "phonepe",
+    "starbucks coffee": "starbucks",
+    "tata starbucks": "starbucks",
+    "third wave": "third wave coffee",
+    "blue tokai coffee": "blue tokai",
+    "reliance retail": "reliance digital",
+    "avenue supermarts": "dmart",
+    "innovative retail": "bigbasket",
+    "supermarket grocery": "bigbasket",
+    "blink commerce": "blinkit",
+    "grofers": "blinkit",
+    "makemytrip india": "makemytrip",
+    "interglobe aviation": "indigo",
+    "cultfit": "cult fit",
+    "tatastarbucks": "starbucks",
+    "apollopharmacy": "apollo pharmacy",
+    "goindigo": "indigo",
+    "thirdwavecoffee": "third wave coffee",
+    "bluetokai": "blue tokai",
+    "dominos pizza": "dominos",
+    "chaipoint": "chai point",
+    "chai point bengaluru": "chai point",
+    "chaayos tea": "chaayos"
+  },
+  "financialSources": [
+    {
+      "key": "hdfc_pixel_play",
+      "label": "HDFC Pixel Play Credit Card",
+      "shortLabel": "Pixel Play",
+      "kind": "credit_card",
+      "issuer": "HDFC Bank",
+      "colorHex": "#7A5CD0",
+      "icon": "card",
+      "priority": 30,
+      "senderDomains": [
+        "hdfcbank.net",
+        "hdfcbank.com",
+        "hdfcbank.co.in"
+      ],
+      "subjectPatterns": [
+        "pixel\\s*play",
+        "\\bpixel\\b"
+      ],
+      "bodyPatterns": [
+        "pixel\\s*play\\s+credit\\s+card",
+        "hdfc\\s+bank\\s+pixel\\s+play",
+        "pixel\\s+homepage",
+        "payzapp",
+        "pixel\\s+(?:credit\\s+)?card"
+      ]
+    },
+    {
+      "key": "hdfc_bank",
+      "label": "HDFC Bank",
+      "shortLabel": "HDFC Bank",
+      "kind": "bank_account",
+      "issuer": "HDFC Bank",
+      "colorHex": "#004C8F",
+      "icon": "bank",
+      "priority": 20,
+      "senderDomains": [
+        "hdfcbank.net",
+        "hdfcbank.com",
+        "hdfcbank.co.in"
+      ],
+      "bodyPatterns": [
+        "hdfc\\s+bank\\s+a/c",
+        "instaalerts",
+        "is\\s+debited\\s+from\\s+your\\s+account",
+        "debited\\s+from\\s+(?:your\\s+)?account",
+        "has\\s+been\\s+(?:successfully\\s+)?credited",
+        "credited\\s+to\\s+(?:your\\s+)?account",
+        "towards\\s+vpa",
+        "upi\\s+transaction\\s+reference",
+        "hdfc\\s+bank\\s+(?:credit|debit)\\s+card",
+        "avl\\s+bal"
+      ],
+      "negativeBodyPatterns": [
+        "\\bpixel\\b",
+        "payzapp"
+      ],
+      "senderFallback": true,
+      "subjectPatterns": [
+        "account\\s+update\\s+for\\s+your\\s+hdfc\\s+bank",
+        "hdfc\\s+bank\\s+a/c"
+      ]
+    },
+    {
+      "key": "union_bank",
+      "label": "Union Bank of India",
+      "shortLabel": "Union Bank",
+      "kind": "bank_account",
+      "issuer": "Union Bank of India",
+      "colorHex": "#C0392B",
+      "icon": "bank",
+      "priority": 20,
+      "senderDomains": [
+        "ubi.bank.in",
+        "ubibank.in",
+        "unionbankofindia.com",
+        "unionbankofindia.bank",
+        "unionbankofindia.co.in",
+        "unionbank.co.in",
+        "unionbankonline.co.in"
+      ],
+      "bodyPatterns": [
+        "union\\s+bank\\s+of\\s+india",
+        "\\bunion\\s+bank\\b",
+        "\\bUBI\\b"
+      ],
+      "senderFallback": true,
+      "senderAddresses": [
+        "noreplyubi-txn@ubi.bank.in",
+        "alerts@unionbankofindia.com",
+        "noreply@unionbankofindia.com",
+        "ubi@unionbankofindia.com",
+        "alerts@unionbankofindia.bank",
+        "transactionalert@unionbankofindia.com"
+      ],
+      "subjectPatterns": [
+        "\\bUBI\\b"
+      ]
+    }
+  ],
+  "merchantSourceHints": {
+    "anthropic": "hdfc_pixel_play"
+  }
+}

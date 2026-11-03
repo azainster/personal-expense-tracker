@@ -1,0 +1,30 @@
+# Render Blueprint for the API the iPhone app talks to (rules pack + optional AI fallback proxy).
+# Render → New → Blueprint → pick this repository. Any Node 22 host works the same way; see
+# SETUP.md "Deploy the API".
+#
+# This service is stateless: it never sees Gmail data, stores nothing, and has no accounts.
+services:
+  - type: web
+    name: expense-tracker-api
+    runtime: node
+    plan: free
+    buildCommand: npm ci --include=dev --workspace @expense/core --workspace server --include-workspace-root && npm run build -w server
+    startCommand: node server/dist/index.js
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: NODE_VERSION
+        value: 22.12.0
+      - key: NODE_ENV
+        value: production
+      # The development dashboard API is off in production; only /api/v1 is served.
+      - key: ENABLE_DEV_API
+        value: "false"
+      # Turn on only after setting ANTHROPIC_API_KEY.
+      - key: LLM_PROXY_ENABLED
+        value: "false"
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: LLM_PROXY_SHARED_TOKEN
+        sync: false
+      - key: LLM_PROXY_RATE_PER_HOUR
+        value: "120"

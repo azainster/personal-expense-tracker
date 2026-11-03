@@ -1,0 +1,18 @@
+node_modules/
+dist/
+data/
+.env
+.env.local
+*.log
+.DS_Store
+coverage/
+
+# Local Expo and Xcode state; these are generated on each machine.
+mobile/.expo/
+mobile/ios/Pods/
+mobile/ios/build/
+mobile/ios/xcuserdata/
+mobile/ios/DerivedData/
+*.xcuserstate
+*.tsbuildinfo
+**/.claude/

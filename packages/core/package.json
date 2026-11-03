@@ -1,0 +1,36 @@
+{
+  "name": "@expense/core",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Platform-independent expense engine: L0-L4 parsing cascade, Gmail client, dedupe, categorization, sync engine and SQL store. Runs on Node and on-device in React Native (Hermes).",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./rules/rules-pack.json": "./rules/rules-pack.json",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "rules"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "dev": "tsc -p tsconfig.build.json --watch --preserveWatchOutput",
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "node-html-parser": "^7.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.5"
+  }
+}

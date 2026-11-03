@@ -1,0 +1,40 @@
+{
+  "name": "expense-tracker",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Gmail-sourced expense tracker: iPhone app (Expo) with an on-device L0-L4 parsing cascade, dedupe and categorization, plus a small API for the rules pack and the opt-in AI fallback.",
+  "workspaces": [
+    "packages/core",
+    "server",
+    "web",
+    "mobile"
+  ],
+  "scripts": {
+    "postinstall": "npm run build -w @expense/core",
+    "dev": "concurrently -n server,web -c cyan,magenta \"npm run dev -w server\" \"npm run dev -w web\"",
+    "server": "npm run dev -w server",
+    "mobile": "npm run start -w mobile",
+    "mobile:web": "npm run web -w mobile",
+    "build": "npm run build -w @expense/core && npm run build -w server && npm run build -w web",
+    "start": "npm run start -w server",
+    "test": "npm run test -w @expense/core && npm run test -w server && npm run test -w mobile",
+    "typecheck": "npm run build -w @expense/core && npm run typecheck -w @expense/core && npm run typecheck -w server && npm run typecheck -w web && npm run typecheck -w mobile",
+    "lint": "npm run lint -w mobile",
+    "seed": "npm run seed -w server",
+    "reset": "npm run reset -w server"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  },
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true,
+    "esbuild@0.25.12": true
+  },
+  "overrides": {
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
+  }
+}

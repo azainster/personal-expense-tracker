@@ -1,0 +1,35 @@
+{
+  "name": "server",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "predev": "npm run build -w @expense/core",
+    "dev": "tsx watch src/index.ts",
+    "prebuild": "npm run build -w @expense/core",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "pretest": "npm run build -w @expense/core",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "pretypecheck": "npm run build -w @expense/core",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "seed": "tsx src/seed/run.ts",
+    "reset": "tsx src/seed/reset.ts",
+    "parse-report": "tsx src/tools/parse-report.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.125.0",
+    "@expense/core": "1.0.0",
+    "dotenv": "^16.4.7",
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.13.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.5"
+  }
+}
